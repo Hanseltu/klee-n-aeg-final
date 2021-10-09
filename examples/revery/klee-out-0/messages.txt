@@ -1,0 +1,4 @@
+KLEE: Using STP solver backend
+KLEE: ERROR: aaw.c:87: Debug: calling a symbolic function address!
+
+KLEE: NOTE: now ignoring this error at this location

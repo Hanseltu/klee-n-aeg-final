@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg/lib/Core/elf-parser/elf_parser.cpp
+elf_parser.hpp
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg/lib/Core/elf-parser/elf_parser.hpp
+
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg/lib/Core/elf-parser/elf_parser.hpp
+iostream
+-
+string
+-
+cstdlib
+-
+cstdio
+-
+fcntl.h
+-
+sys/stat.h
+-
+sys/mman.h
+-
+vector
+-
+elf.h
+-
+fcntl.h
+-
+
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg/lib/Core/elf-parser/symbols.cc
+iostream
+-
+inttypes.h
+-
+elf_parser.hpp
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg/lib/Core/elf-parser/elf_parser.hpp
+

@@ -1,0 +1,1 @@
+cmd='/home/jqhong/packages/CMake-3.21.2/bin/cmake;-E;echo;'

@@ -1,0 +1,1 @@
+g++ -fPIC  -Wall -Wextra -Wno-unused-parameter -O2 -g  -shared -Wl,-soname,libelf-parser.so -o ../lib/libelf-parser.so CMakeFiles/elf-parser.dir/symbols.cc.o CMakeFiles/elf-parser.dir/elf_parser.cpp.o 

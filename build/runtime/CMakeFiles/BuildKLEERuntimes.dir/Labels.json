@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/CMakeFiles/BuildKLEERuntimes"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/CMakeFiles/BuildKLEERuntimes.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/CMakeFiles/BuildKLEERuntimes-complete.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-RuntimeBuild.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-build.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-configure.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-download.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-install.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-mkdir.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-patch.rule"
+		},
+		{
+			"file" : "/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/runtime/BuildKLEERuntimes-prefix/src/BuildKLEERuntimes-stamp/BuildKLEERuntimes-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"BuildKLEERuntimes"
+		],
+		"name" : "BuildKLEERuntimes"
+	}
+}

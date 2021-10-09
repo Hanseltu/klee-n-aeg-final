@@ -1,0 +1,10 @@
+Error: Debug: calling a symbolic function address!
+
+File: aaw.c
+Line: 87
+assembly.ll line: 8890
+Stack: 
+	#000008890 in __klee_posix_wrapped_main (=1, =93825064719312) at aaw.c:87
+	#100007093 in __user_main (=1, =93825035763200, =93825035763216) at runtime/POSIX/klee_init_env.c:245
+	#200000542 in __uClibc_main (=93825036174728, =1, =93825035763200, =0, =0, =0, =0) at libc/misc/internals/__uClibc_main.c:401
+	#300000708 in main (=1, =93825035763200)

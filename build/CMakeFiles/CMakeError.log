@@ -1,0 +1,184 @@
+Determining if the prototype Z3_get_error_msg exists for HAVE_Z3_GET_ERROR_MSG_NEEDS_CONTEXT failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_7ed94/fast && /usr/bin/make  -f CMakeFiles/cmTC_7ed94.dir/build.make CMakeFiles/cmTC_7ed94.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7ed94.dir/CheckPrototypeDefinition.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_7ed94.dir/CheckPrototypeDefinition.c.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckPrototypeDefinition.c
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckPrototypeDefinition.c:14:11: error: conflicting types for ‘Z3_get_error_msg’
+ Z3_string Z3_get_error_msg(Z3_context c, Z3_error_code err) {
+           ^~~~~~~~~~~~~~~~
+In file included from /usr/include/z3.h:26:0,
+                 from /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckPrototypeDefinition.c:1:
+/usr/include/z3_api.h:5314:22: note: previous declaration of ‘Z3_get_error_msg’ was here
+     Z3_string Z3_API Z3_get_error_msg(Z3_error_code err);
+                      ^~~~~~~~~~~~~~~~
+CMakeFiles/cmTC_7ed94.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_7ed94.dir/CheckPrototypeDefinition.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_7ed94.dir/CheckPrototypeDefinition.c.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_7ed94/fast' failed
+make: *** [cmTC_7ed94/fast] Error 2
+
+
+
+#include </usr/include/z3.h>
+
+
+static void cmakeRequireSymbol(int dummy, ...) {
+  (void) dummy;
+}
+
+static void checkSymbol(void) {
+#ifndef Z3_get_error_msg
+  cmakeRequireSymbol(0, &Z3_get_error_msg);
+#endif
+}
+
+Z3_string Z3_get_error_msg(Z3_context c, Z3_error_code err) {
+  return NULL;
+}
+
+#ifdef __CLASSIC_C__
+int main() {
+  int ac;
+  char*av[];
+#else
+int main(int ac, char *av[]) {
+#endif
+  checkSymbol();
+  if (ac > 1000) {
+    return *av[0];
+  }
+  return 0;
+}
+
+
+Determining if the include file util.h exists failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_72334/fast && /usr/bin/make  -f CMakeFiles/cmTC_72334.dir/build.make CMakeFiles/cmTC_72334.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_72334.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_72334.dir/CheckIncludeFile.c.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: util.h: No such file or directory
+ #include <util.h>
+          ^~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_72334.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_72334.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_72334.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_72334/fast' failed
+make: *** [cmTC_72334/fast] Error 2
+
+
+
+Determining if the include file libutil.h exists failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_5f8f9/fast && /usr/bin/make  -f CMakeFiles/cmTC_5f8f9.dir/build.make CMakeFiles/cmTC_5f8f9.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_5f8f9.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_5f8f9.dir/CheckIncludeFile.c.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: libutil.h: No such file or directory
+ #include <libutil.h>
+          ^~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_5f8f9.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_5f8f9.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_5f8f9.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_5f8f9/fast' failed
+make: *** [cmTC_5f8f9/fast] Error 2
+
+
+
+Determining if the function openpty exists failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_4fb2c/fast && /usr/bin/make  -f CMakeFiles/cmTC_4fb2c.dir/build.make CMakeFiles/cmTC_4fb2c.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_4fb2c.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter -DCHECK_FUNCTION_EXISTS=openpty -o CMakeFiles/cmTC_4fb2c.dir/CheckFunctionExists.c.o -c /home/jqhong/packages/CMake-3.21.2/Modules/CheckFunctionExists.c
+Linking C executable cmTC_4fb2c
+/home/jqhong/packages/CMake-3.21.2/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4fb2c.dir/link.txt --verbose=1
+/usr/bin/cc  -Wall -Wextra -Wno-unused-parameter -DCHECK_FUNCTION_EXISTS=openpty -rdynamic CMakeFiles/cmTC_4fb2c.dir/CheckFunctionExists.c.o -o cmTC_4fb2c 
+CMakeFiles/cmTC_4fb2c.dir/CheckFunctionExists.c.o: In function `main':
+CheckFunctionExists.c:(.text+0x10): undefined reference to `openpty'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_4fb2c.dir/build.make:98: recipe for target 'cmTC_4fb2c' failed
+make[1]: *** [cmTC_4fb2c] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_4fb2c/fast' failed
+make: *** [cmTC_4fb2c/fast] Error 2
+
+
+
+Determining if the malloc_zone_statistics exist failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_2dc1a/fast && /usr/bin/make  -f CMakeFiles/cmTC_2dc1a.dir/build.make CMakeFiles/cmTC_2dc1a.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_2dc1a.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_2dc1a.dir/CheckSymbolExists.cxx.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:2:10: fatal error: malloc/malloc.h: No such file or directory
+ #include <malloc/malloc.h>
+          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_2dc1a.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_2dc1a.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_2dc1a.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_2dc1a/fast' failed
+make: *** [cmTC_2dc1a/fast] Error 2
+
+
+File /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <malloc/malloc.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef malloc_zone_statistics
+  return ((int*)(&malloc_zone_statistics))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+Determining if the include file selinux/selinux.h exists failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_c8033/fast && /usr/bin/make  -f CMakeFiles/cmTC_c8033.dir/build.make CMakeFiles/cmTC_c8033.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_c8033.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_c8033.dir/CheckIncludeFile.c.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: selinux/selinux.h: No such file or directory
+ #include <selinux/selinux.h>
+          ^~~~~~~~~~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_c8033.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_c8033.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_c8033.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_c8033/fast' failed
+make: *** [cmTC_c8033/fast] Error 2
+
+
+
+Determining if the include file sys/acl.h exists failed with the following output:
+Change Dir: /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_e8bcf/fast && /usr/bin/make  -f CMakeFiles/cmTC_e8bcf.dir/build.make CMakeFiles/cmTC_e8bcf.dir/build
+make[1]: Entering directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_e8bcf.dir/CheckIncludeFile.c.o
+/usr/bin/cc   -Wall -Wextra -Wno-unused-parameter  -o CMakeFiles/cmTC_e8bcf.dir/CheckIncludeFile.c.o -c /home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c:1:10: fatal error: sys/acl.h: No such file or directory
+ #include <sys/acl.h>
+          ^~~~~~~~~~~
+compilation terminated.
+CMakeFiles/cmTC_e8bcf.dir/build.make:77: recipe for target 'CMakeFiles/cmTC_e8bcf.dir/CheckIncludeFile.c.o' failed
+make[1]: *** [CMakeFiles/cmTC_e8bcf.dir/CheckIncludeFile.c.o] Error 1
+make[1]: Leaving directory '/home/jqhong/klee-nme/klee-nme-aeg/klee-n-aeg-final/build/CMakeFiles/CMakeTmp'
+Makefile:127: recipe for target 'cmTC_e8bcf/fast' failed
+make: *** [cmTC_e8bcf/fast] Error 2
+
+
+
