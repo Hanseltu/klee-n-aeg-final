@@ -2408,7 +2408,9 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                 	        printf("direct FP to be written = %p \n", fp_pie + heap_base);
                 		    printf("aaw value to be written = %p \n", fp_pie + heap_base - offset);
                             klee_warning("AEG: offset to target object %lld\n", offset);
-				            ref<Expr> fp = ConstantExpr::create(fp_pie + heap_base, Expr::Int64); //test global_a
+				            //ref<Expr> fp = ConstantExpr::create(fp_pie + heap_base, Expr::Int64); //test global_a
+				ref<Expr> fp = ConstantExpr::create(0x5555557578e0, Expr::Int64); //test heap object
+				//0x555555756cf0
                             if (name != "__exit_cleanup") { //Just omit this buildin function
                                 printf("*************AEG: Write the first constraint***********\n");
                                 addConstraint(state, EqExpr::create(temp, fp));
@@ -3088,7 +3090,7 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
         printf("////***** Do backtracing : Begin *****/////\n");
         //traverse allocaMap
         for (auto iter = allocaMap.begin(); iter != allocaMap.end(); iter++){
-            printf("dest : %d --- address : %d\n", iter->first, iter->second);
+            printf("dest : %d --- address : %p\n", iter->first, iter->second);
         }
         //ki->inst->dump();
         if (*ki->operands < 0){
@@ -3136,8 +3138,14 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                         ki_temp = state.stack[state.stack.size()-1].kf->instructions[i];
                         //inst_temp->dump();
                         if (inst_temp->getOpcode() == Instruction::Load){
+                            //TODO ad-hoc solution to solve the * issue
+                            if (inst_temp->getType()->getTypeID() != 15)
+                                ki_temp = state.stack[state.stack.size()-1].kf->instructions[i-1];
                             printf("    dest of loaded from  : %d\n", *ki_temp->operands);
+                            printf("    dest   : %d\n", ki_temp->dest);
                             printf("    address of the loaded variable :%lu \n", allocaMap[*ki_temp->operands]);
+                            //printf("    address of the loaded variable ++++ :%p \n", ki_temp->operands);
+
                             //TODO find the name of load
                             //llvm::AllocaInst *allocaTest = dyn_cast<llvm::AllocaInst>(&*inst_temp);
                             printf(" +++ name = %s\n", inst_temp->getOperand(0)->getName().str().c_str());
@@ -3146,7 +3154,9 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                 //Expr::Width type = e_temp->getWidth();
                 unsigned bytes = Expr::getMinBytesForWidth(Expr::Int64);
                 //e_temp = optimizer.optimizeExpr(e_temp, true);
-                ref<Expr> e_temp = ConstantExpr::create(allocaMap[*ki_temp->operands], Expr::Int64);
+                //ref<Expr> e_temp = ConstantExpr::create(allocaMap[*ki_temp->operands], Expr::Int64);
+		ref<Expr> e_temp = ConstantExpr::create(0x655555756cf0, Expr::Int64);
+
                 e_temp = optimizer.optimizeExpr(e_temp, true);
                 ObjectPair op;
                 bool success;
@@ -3156,6 +3166,7 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                     success = state.addressSpace.resolveOne(cast<ConstantExpr>(e_temp), op);
                 }
                 solver->setTimeout(time::Span());
+                printf("success = %d\n", success);
                 if (success){
                     const MemoryObject *mo = op.first;
                     const ObjectState *os = op.second;
@@ -3166,10 +3177,11 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                     bool inBounds;
                     bool success = solver->mustBeTrue(state, check, inBounds);
 
+                    printf("inBounds = %d\n", inBounds);
                     if (inBounds){
                         printf("We found its OS?\n");
                         ref<Expr> result = os->read(offset, Expr::Int32);
-                        //result->dump();
+                        result->dump();
                         printf("ObjectState readOnly in tracing back  = %d\n", os->readOnly);
                     }
                 }
@@ -4448,6 +4460,18 @@ void Executor::executeAlloc(ExecutionState &state,
                 // emulate_nme_req(&state, 1);
                 mo->nativeAddress = state.heap_allocs.back().nativeAddress;
                 mo->address = mo->nativeAddress;
+		        //Haoxin for AEG start
+                std::string location = target->getSourceLocation();
+		        printf("location: %s\n", location.c_str());
+                printf("in executeAlloc target->dest = %d", target->dest);
+                printf("in executeAlloc mo->getBaseExpr() in executeAlloc = %p\n", mo->address);
+                allocaMap.insert(std::pair<unsigned, uint64_t>(target->dest, mo->address));
+                KInstruction *ki_temp;
+                for (int i = 0; i < state.stack[state.stack.size() - 1].kf->numInstructions; i++){
+                    ki_temp = state.stack[state.stack.size()-1].kf->instructions[i];
+                    printf("In is heap: dest = %d --- operands = %p\n", ki_temp->dest, *ki_temp->operands);
+                }
+                //Haoxin for AEG end
                 printf ("in malloc, state: %p. mo->size: 0x%lx. mo->address: %lx. mo->kleeAddress: %lx, mo->nativeAddress: %lx. \n", &state, mo->size, mo->address, mo->kleeAddress, mo->nativeAddress);
             }
             /* /Jiaqi */
@@ -4464,9 +4488,9 @@ void Executor::executeAlloc(ExecutionState &state,
       //
       std::string location = target->getSourceLocation();
       if (location.find("libc/") == std::string::npos){ // TODO should we parse arguments from command line?
-        //printf("target->dest = %d; address = %d\n", target->dest, temp->getZExtValue());
-        //printf("mo->getBaseExpr() in executeAlloc = %d\n", mo->address);
-        allocaMap.insert(std::pair<unsigned, uint64_t>(target->dest, temp->getZExtValue()));
+        printf("in executeAlloc target->dest = %d; address = %d\n", target->dest, temp->getZExtValue());
+        printf("out of isHeap in executeAlloc mo->getBaseExpr() in executeAlloc = %p\n", mo->kleeAddress);
+        allocaMap.insert(std::pair<unsigned, uint64_t>(target->dest, mo->address));
       }
             bindLocal(target, state, mo->getBaseExpr());
 
