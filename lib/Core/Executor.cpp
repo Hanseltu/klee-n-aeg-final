@@ -1850,6 +1850,7 @@ const Array* scan2(ref<Expr> e, std::set<std::string> &symNameList) {
 }
 // *Haoxin end
 
+
 void print_symbols(std::vector<elf_parser::symbol_t> &symbols) {
     printf("Num:    Value  Size Type    Bind   Vis      Ndx Name\n");
     for (auto &symbol : symbols) {
@@ -2267,12 +2268,20 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
               //printf("  dest = %d, operand = %d\n", state.stack[state.stack.size()-1].kf->instructions[i]->dest,
                //       *state.stack[state.stack.size()-1].kf->instructions[i]->operands);
               //inst->dump();
+                ref<Expr> base_test = eval(state.stack[state.stack.size()-1].kf->instructions[i], 0, state).value;
+                printf("address of function pointer start\n");
+                base_test->dump();
+                printf("address of function pointer done\n");
               //find the name
               if (inst->getNumOperands() != 1)
                 terminateStateOnExecError(state, "Error in handle indirect function call!\n");
               llvm::Value *opnd = inst->getOperand(0);
               if (opnd->hasName()){
                 opnd_name = opnd->getName();
+                //ref<Expr> base_test = eval(state.stack[state.stack.size()-1].kf->instructions[i], 0, state).value;
+                //printf("address of function pointer start\n");
+                //base_test->dump();
+                //printf("address of function pointer done\n");
               }
               else{
                  ;//terminateStateOnExecError(state, "Error in handle indirect function call (Operand don't have a name)!\n");
@@ -3139,13 +3148,54 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                         //inst_temp->dump();
                         if (inst_temp->getOpcode() == Instruction::Load){
                             //TODO ad-hoc solution to solve the * issue
-                            if (inst_temp->getType()->getTypeID() != 15)
+                            if (inst_temp->getType()->getTypeID() != 15) //TODO for pointer?
                                 ki_temp = state.stack[state.stack.size()-1].kf->instructions[i-1];
                             printf("    dest of loaded from  : %d\n", *ki_temp->operands);
                             printf("    dest   : %d\n", ki_temp->dest);
                             printf("    address of the loaded variable :%lu \n", allocaMap[*ki_temp->operands]);
                             //printf("    address of the loaded variable ++++ :%p \n", ki_temp->operands);
+                            // find the load address so that we don't need to care about the different types of objects
+                            ref<Expr> base_target = eval(ki_temp, 0, state).value;
+                            printf("directly load address start\n");
+                            base_target->dump();
+                            printf("directly load address done\n");
+                            //start to find the address of different objects;
+                            //current support global variables and heap objects
+                            ref<ConstantExpr> target_value = toConstant(state, base_target, "target_address");
+                            uint64_t target_address = target_value->getZExtValue();
 
+                            //find it in ELF file;
+                            std::string target_name = inst_temp->getOperand(0)->getName().str();
+                            //opnd_name = "handler"; //should be fetch from symbolic name;
+                            printf(" +++ target_name = %s, size of target_name = %d\n", target_name.c_str(), target_name.size());
+                            unsigned long long fp_pie = 0;
+                            if (target_name.size() == 0 && target_address > 0x600000000000){ //a heap object
+                                printf("Great! This is a target object in heap!\n");
+                            }
+                            else if (target_name.size() != 0){ // a possible global object
+                                std::string program("test");
+                                elf_parser::Elf_parser elf_parser(program);
+
+                                std::vector<elf_parser::symbol_t> syms = elf_parser.get_symbols();
+                                for (auto s : syms){
+                                    //printf("symbol_name = %s ; symbol_value = %08x \n", s.symbol_name.c_str(), s.symbol_value);
+                                    if (s.symbol_name == target_name){
+                                        fp_pie = s.symbol_value;
+                                    }
+                                }
+                                if (fp_pie != 0){
+                                    printf("Great! This is a target object in global!\n");
+                                    //terminateStateOnExecError(state, "Failed to find a name of global function pointer in binary (is this the name issue?)!");
+                                    unsigned long long heap_base = 0x555555554000;
+                                    printf("native global variable address is %p \n", heap_base + fp_pie);
+                                }else {
+                                    terminateStateOnExecError(state, "Something error in finding address in ELF file when performing backwardTracing");
+                                }
+                            }
+                            else{ // not avaiable object
+                            //if (target_address < 0x600000000000 && target_name.size() == 0) {
+                                printf("Opps, This is a not a global variable or heap object\n");
+                            }
                             //TODO find the name of load
                             //llvm::AllocaInst *allocaTest = dyn_cast<llvm::AllocaInst>(&*inst_temp);
                             printf(" +++ name = %s\n", inst_temp->getOperand(0)->getName().str().c_str());
@@ -3154,8 +3204,8 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                 //Expr::Width type = e_temp->getWidth();
                 unsigned bytes = Expr::getMinBytesForWidth(Expr::Int64);
                 //e_temp = optimizer.optimizeExpr(e_temp, true);
-                //ref<Expr> e_temp = ConstantExpr::create(allocaMap[*ki_temp->operands], Expr::Int64);
-		ref<Expr> e_temp = ConstantExpr::create(0x655555756cf0, Expr::Int64);
+                ref<Expr> e_temp = ConstantExpr::create(allocaMap[*ki_temp->operands], Expr::Int64);
+		        //ref<Expr> e_temp = ConstantExpr::create(0x655555756cf0, Expr::Int64);
 
                 e_temp = optimizer.optimizeExpr(e_temp, true);
                 ObjectPair op;
@@ -3274,6 +3324,9 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
         case Instruction::GetElementPtr: {
                                              KGEPInstruction *kgepi = static_cast<KGEPInstruction*>(ki);
                                              ref<Expr> base = eval(ki, 0, state).value;
+                                             //printf("================== GetElementPtr Start =================\n");
+                                             //base->dump();
+                                             //printf("================== GetElementPtr End =================\n");
 
                                              for (std::vector< std::pair<unsigned, uint64_t> >::iterator
                                                      it = kgepi->indices.begin(), ie = kgepi->indices.end();
@@ -3733,6 +3786,26 @@ void Executor::executeInstruction(ExecutionState &state, KInstruction *ki) {
                                           break;
     }
 }
+
+//*Haoxin for AEG (modular) TODO
+void maintainUpdateList(std::map<std::string, ref<Expr>> FunctionAddressMap, KInstruction *ki) {
+    ;
+}
+
+std::pair<std::string, uint64_t> backwardTracing(ExecutionState &state, KInstruction *ki){
+    std::pair<std::string, uint64_t> ret;
+    return ret;
+}
+
+std::pair<uint64_t, u_int64_t> setAAWTarget(std::map<std::string, ref<Expr>> FunctionAddressMap,
+                                            std::map<uint64_t, std::pair<std::string, uint64_t>> fpUpdateList,
+                                            KInstruction *ki,
+                                            uint64_t dest){
+    std::pair<uint64_t, uint64_t> ret;
+    return ret;
+}
+// *Haoxin end
+
 
 void Executor::updateStates(ExecutionState *current) {
   if (searcher) {
@@ -4460,6 +4533,7 @@ void Executor::executeAlloc(ExecutionState &state,
                 // emulate_nme_req(&state, 1);
                 mo->nativeAddress = state.heap_allocs.back().nativeAddress;
                 mo->address = mo->nativeAddress;
+                /*
 		        //Haoxin for AEG start
                 std::string location = target->getSourceLocation();
 		        printf("location: %s\n", location.c_str());
@@ -4472,6 +4546,7 @@ void Executor::executeAlloc(ExecutionState &state,
                     printf("In is heap: dest = %d --- operands = %p\n", ki_temp->dest, *ki_temp->operands);
                 }
                 //Haoxin for AEG end
+                */
                 printf ("in malloc, state: %p. mo->size: 0x%lx. mo->address: %lx. mo->kleeAddress: %lx, mo->nativeAddress: %lx. \n", &state, mo->size, mo->address, mo->kleeAddress, mo->nativeAddress);
             }
             /* /Jiaqi */
@@ -4482,6 +4557,7 @@ void Executor::executeAlloc(ExecutionState &state,
                 os->initializeToRandom();
             }
 
+            /*
 	    // Haoxin for AEG
       ref<ConstantExpr> temp = mo->getBaseExpr();
       //printf("mo->getBaseExpr() in executeAlloc = %d\n", temp->getZExtValue());
@@ -4492,6 +4568,7 @@ void Executor::executeAlloc(ExecutionState &state,
         printf("out of isHeap in executeAlloc mo->getBaseExpr() in executeAlloc = %p\n", mo->kleeAddress);
         allocaMap.insert(std::pair<unsigned, uint64_t>(target->dest, mo->address));
       }
+      */
             bindLocal(target, state, mo->getBaseExpr());
 
             if (reallocFrom) {
